@@ -102,6 +102,7 @@ class forward extends rcube_plugin {
     }
     function forward_form() {
         $rcmail = rcmail::get_instance();
+        $rcmail->output->add_label('forward.noaddressfilled'); //for correctly displaying alert if <input> is empty
         $table = new html_table(array('cols' => 2));
         $table->add('title', Q($this->gettext('newforwardrule') . ":"));
         $inputfield = new html_inputfield(array('name' => '_new_forward', 'id' => '_new_forward'));
