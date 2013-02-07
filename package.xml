@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.9.0" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+	<name>forward</name>
+	<channel>pear.roundcube.net</channel>
+	<summary>Forward messages</summary>
+	<description>Plugin that allows to set forward address in RoundCube</description>
+	<lead>
+		<name>Martin Petracek</name>
+		<user>pechy</user>
+		<email>pechy@bubakov.net</email>
+		<active>yes</active>
+	</lead>
+	<date>2013-02-08</date>
+	<version>
+		<release>0.1</release>
+	</version>
+	<stability>
+		<release>stable</release>
+		<api>stable</api>
+	</stability>
+	<license uri="http://www.gnu.org/licenses/gpl-2.0.html">GNU GPLv2</license>
+	<notes>
+- First version, currently only supported method is directly changing Postfix database.
+    </notes>
+	<contents>
+		<dir baseinstalldir="/" name="/">
+			<file name="forward.php" role="php"></file>
+			<file name="forward.js" role="data"></file>
+			<file name="README" role="data"></file>
+			<file name="localization/cs_CZ.inc" role="data"></file>
+			<file name="localization/en_US.inc" role="data"></file>
+			<file name="config.inc.php" role="data"></file>
+		</dir>
+		<!-- / -->
+	</contents>
+	<dependencies>
+		<required>
+			<php>
+				<min>5.2.1</min>
+			</php>
+			<pearinstaller>
+				<min>1.7.0</min>
+			</pearinstaller>
+		</required>
+	</dependencies>
+	<phprelease/>
+</package>
