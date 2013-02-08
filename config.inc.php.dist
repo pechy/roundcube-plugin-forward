@@ -8,20 +8,32 @@ $rcmail_config['forward_domain']='@example.com';
 $rcmail_config['forward_max_forwards']=5;
 //max forward address per user - to protect from misusing roundcube as spam tool by bad guys
 
-$rcmail_config['forward_postfix_db_dsn']='mysql://postfixuser:postfixpass@host/postfixdb';
+$rcmail_config['forward_to_same_addr']=TRUE;
+//on my postfix server, when I add one forward rule to remote address, I have to add also forward rule (user = alias), otherwise my emails are delivered only to remove address, not to roundcube
+//adding only one forward rule causes complete forward, no messages will be delivered to this mailbox
+//setting this to TRUE ensures, this settings ensures, if there is >0 forward rules, there will be also forward to the same address, if all forwards are deleted, rule forwarding to same address will be also deleted
+
+$rcmail_config['forward_driver']='sql';
+//driver to be used by Forward - currenty there is only sql
+
+
+//SQL driver config section
+$rcmail_config['forward_sql_construct']='mysql://postfixuser:postfixpass@host/postfixdb';
+//this value is given as parameter to __construct() of driver class
 //Postfix DB creditials
 
-$rcmail_config['forward_sql_new_forward']="INSERT INTO `users` VALUES ('%u', '', '', '', '', 'forward', '%f', '');";
-//SQL query for insert new FORWARD address
+$rcmail_config['forward_sql_new_forward']="INSERT INTO `users` VALUES (%u, '', '', '', '', 'forward', %f, '');";
+//SQL query for insert new FORWARD address (escaping and adding quotes is done by module)
 // %u - current user
 // %f - address for forwarding
 
-$rcmail_config['forward_sql_del_forward']="DELETE FROM `users` WHERE `mail` LIKE '%u' AND `typ` LIKE 'forward' AND `alias` LIKE '%a'";
-//SQL query for selecting rules for this mail
+$rcmail_config['forward_sql_del_forward']="DELETE FROM `users` WHERE `mail` LIKE %u AND `typ` LIKE 'forward' AND `alias` LIKE %a";
+//SQL query for selecting rules for this mail (escaping and adding quotes is done by module)
 // %u - current user
 // %a - alias to be removed
 
-$rcmail_config['forward_sql_list_forwards']="SELECT alias FROM `users` WHERE `mail` LIKE '%u' AND `typ` LIKE 'forward'";
-//SQL query for selecting rules for this mail
+$rcmail_config['forward_sql_list_forwards']="SELECT alias FROM `users` WHERE `mail` LIKE %u AND `typ` LIKE 'forward'";
+//SQL query for selecting rules for this mail (escaping and adding quotes is done by module)
+//please note that the query should return only one collum
 // %u - current user
 ?>
