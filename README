@@ -3,16 +3,18 @@
  *
  * Simple plugin that allows to create forward rules. Currently works only with Postfix configuration stored in database
  *
- * @version 0.1
+ * @version 0.2
  * @author Martin Petracek <pechy@bubakov.net>
  *  
  */
 
 To install the plugin you have to: 
 1. copy the forward folder in the plugins folder of roundcube;
-2. add "forward" in the plugins section of the roundcube configuration (config/main.inc.php). 
+2. adapt config.inc.php.dist, rename it to config.inc.php
+3. add "forward" in the plugins section of the roundcube configuration (config/main.inc.php).
 
 
 History
 
+0.2 Rewrited to be more modular, SQL related parts moved to drivers/sql.inc.php, now supports for rouncube-0.9-beta
 0.1 Initial version.
