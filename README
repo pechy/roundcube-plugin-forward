@@ -16,5 +16,5 @@ To install the plugin you have to:
 
 History
 
-0.2 Rewrited to be more modular, SQL related parts moved to drivers/sql.inc.php, now supports for rouncube-0.9-beta
+0.2 Rewrited to be more modular, SQL related parts moved to drivers/sql.inc.php, now supports rouncube-0.9-beta
 0.1 Initial version.
