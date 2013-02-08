@@ -8,11 +8,7 @@ $rcmail_config['forward_domain']='@example.com';
 $rcmail_config['forward_max_forwards']=5;
 //max forward address per user - to protect from misusing roundcube as spam tool by bad guys
 
-
-$rcmail_config['forward_postfix_db_user']='postfixuser';
-$rcmail_config['forward_postfix_db_pass']='postfixpass';
-$rcmail_config['forward_postfix_db_dbname']='postfix';
-$rcmail_config['forward_postfix_db_host']='127.0.0.1';
+$rcmail_config['forward_postfix_db_dsn']='mysql://postfixuser:postfixpass@host/postfixdb';
 //Postfix DB creditials
 
 $rcmail_config['forward_sql_new_forward']="INSERT INTO `users` VALUES ('%u', '', '', '', '', 'forward', '%f', '');";
@@ -28,3 +24,4 @@ $rcmail_config['forward_sql_del_forward']="DELETE FROM `users` WHERE `mail` LIKE
 $rcmail_config['forward_sql_list_forwards']="SELECT alias FROM `users` WHERE `mail` LIKE '%u' AND `typ` LIKE 'forward'";
 //SQL query for selecting rules for this mail
 // %u - current user
+?>
