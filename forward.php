@@ -10,14 +10,17 @@
  */
 class forward extends rcube_plugin {
     private $postfix_db_conn;
+    private $username;
     public $task = 'settings';
     function init() {
         $rcmail = rcmail::get_instance();
         $this->load_config();
         //connect to Postfix DB
-        $dsn = "mysql://" . $rcmail->config->get('forward_postfix_db_user') . ":" . $rcmail->config->get('forward_postfix_db_pass') . "@" . $rcmail->config->get('forward_postfix_db_host') . "/" . $rcmail->config->get('forward_postfix_db_dbname');
-        $this->postfix_db_conn = MDB2::connect($dsn);
+        $this->postfix_db_conn = MDB2::connect($rcmail->config->get('forward_postfix_db_dsn'));
         if (PEAR::isError($this->postfix_db_conn)) $rcmail->output->command('display_message', $this->gettext('cantconnect') . $this->postfix_db_conn->getMessage(), 'error');
+        //set $this->username
+        $this->username = $_SESSION['username'];
+        if (!preg_match('/@/', $this->username)) $this->username.= $rcmail->config->get('forward_domain'); //if domain part is missing - add it
         $this->add_texts('localization/');;
         $this->register_action('plugin.forward', array($this, 'forward_init'));
         $this->register_action('plugin.forward-save', array($this, 'forward_save'));
@@ -43,26 +46,22 @@ class forward extends rcube_plugin {
         else {
             if (preg_match('/[a-z0-9.-]+@[a-z0-9-.]+.[a-z0-9-.]+/', $forward)) { //is string format valid?
                 $sql = $rcmail->config->get('forward_sql_list_forwards');
-                $username = $_SESSION['username'];
-                if (!preg_match('/@/', $username)) $username.= $rcmail->config->get('forward_domain'); //if username is without domain part - add domain
-                $sql = str_replace('%u', $username, $sql);
+                $sql = str_replace('%u', $this->username, $sql);
                 $result = $this->postfix_db_conn->query($sql);
                 if (($result->NumRows() - 1) < $rcmail->config->get('forward_max_forwards')) { //check if there isn't too many address for redirecting
                     while ($rule = $result->fetchRow()) if ($rule[0] == $forward) $alreadythere = true;
                     if (!$alreadythere) { //check if this is address isn't in DB already
                         $sql = $rcmail->config->get('forward_sql_new_forward');
-                        $username = $_SESSION['username'];
-                        if (!preg_match('/@/', $username)) $username.= $rcmail->config->get('forward_domain');
-                        $sql = str_replace('%u', $username, $sql);
+                        $sql = str_replace('%u', $this->username, $sql);
                         $sql = str_replace('%f', $this->postfix_db_conn->escape($forward), $sql);
                         if ($this->postfix_db_conn->query($sql)) { //new address succesfully added
                             $rcmail->output->command('display_message', $this->gettext('successfullysaved'), 'confirmation');
-                            write_log('forward', "user $username set new forward address to $forward"); //log success
+                            write_log('forward', "user $this->username set new forward address to $forward"); //log success
                         } else $rcmail->output->command('display_message', $this->gettext('unsuccessfullysaved'), 'error');
                         if ($result->NumRows() == 0) { //if this is first forward - add another one (username=alias) to deliver also to this roundcube mailbox
                             $sql = $rcmail->config->get('forward_sql_new_forward');
-                            $sql = str_replace('%u', $username, $sql);
-                            $sql = str_replace('%f', $username, $sql);
+                            $sql = str_replace('%u', $this->username, $sql);
+                            $sql = str_replace('%f', $this->username, $sql);
                             $this->postfix_db_conn->query($sql);
                         }
                     } else $rcmail->output->command('display_message', $this->gettext('addressalreadythere'), 'error');
@@ -76,25 +75,23 @@ class forward extends rcube_plugin {
         $rcmail = rcmail::get_instance();
         $this->register_handler('plugin.body', array($this, 'forward_form'));
         $this->add_texts('localization/');
-        $username = $_SESSION['username'];
-        if (!preg_match('/@/', $username)) $username.= $rcmail->config->get('forward_domain');
         $sql = $rcmail->config->get('forward_sql_del_forward');
-        $sql = str_replace('%u', $username, $sql);
+        $sql = str_replace('%u', $this->username, $sql);
         $sql = str_replace('%a', $this->postfix_db_conn->escape(urldecode($_GET['mail'])), $sql);
         $result = $this->postfix_db_conn->query($sql);
         if (PEAR::isError($result)) {
             $rcmail->output->command('display_message', $this->gettext('unsuccessfullydeleted'), 'error');
-            write_log('forward', "user $username deleted forwarding mails to address" . urldecode($_GET['mail']));
+            write_log('forward', "user $this->username deleted forwarding mails to address" . urldecode($_GET['mail']));
         } else $rcmail->output->command('display_message', $this->gettext('successfullydeleted'), 'confirmation');
         //check for next forwardings
         $sql = $rcmail->config->get('forward_sql_list_forwards');
-        $sql = str_replace('%u', $username, $sql);
+        $sql = str_replace('%u', $this->username, $sql);
         $result = $this->postfix_db_conn->query($sql);
         if ($result->NumRows() == 1) {
             //delete also forward to the same address
             $sql = $rcmail->config->get('forward_sql_del_forward');
-            $sql = str_replace('%u', $username, $sql);
-            $sql = str_replace('%a', $username, $sql);
+            $sql = str_replace('%u', $this->username, $sql);
+            $sql = str_replace('%a', $this->username, $sql);
             $result = $this->postfix_db_conn->query($sql);
         }
         rcmail_overwrite_action('plugin.forward');
@@ -109,13 +106,11 @@ class forward extends rcube_plugin {
         $table->add('', $inputfield->show(""));
         $table2 = new html_table(array('cols' => 2));
         $sql = $rcmail->config->get('forward_sql_list_forwards');
-        $username = $_SESSION['username'];
-        if (!preg_match('/@/', $username)) $username.= $rcmail->config->get('forward_domain');
-        $sql = str_replace('%u', $username, $sql);
+        $sql = str_replace('%u', $this->username, $sql);
         $result = $this->postfix_db_conn->query($sql);
         if ($result->NumRows()) {
             while ($rule = $result->fetchRow()) {
-                if ($rule[0] == $username) continue;
+                if ($rule[0] == $this->username) continue;
                 $table2->add('alias', $rule[0]);
                 $dlink = "<a href='./?_task=settings&_action=plugin.forward-delete&mail=" . urlencode($rule[0]) . "' onclick=\"return confirm('" . $this->gettext('reallydelete') . "');\">" . $this->gettext('delete') . "</a>";
                 $table2->add('title', $dlink);
