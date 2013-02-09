@@ -1,7 +1,7 @@
 <?php
 
 $labels = array();                                
-$labels['forward'] = 'Přesposílání';
+$labels['forward'] = 'Přeposílání';
 $labels['newforwardrule'] = 'Adresa pro přeposílání';
 $labels['storedforwards'] = 'Aktivní přeposílání';
 $labels['noaddressfilled'] = 'Nevyplnili jste adresu.';

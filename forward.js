@@ -1,7 +1,7 @@
 if (window.rcmail) {
   rcmail.addEventListener('init', function(evt) {
     var tab = $('<span>').attr('id', 'settingstabpluginforward').addClass('tablink filter');
-    var button = $('<a>').attr('href', rcmail.env.comm_path+'&_action=plugin.forward').html(rcmail.gettext('forward')).appendTo(tab);
+    var button = $('<a>').attr('href', rcmail.env.comm_path+'&_action=plugin.forward').html(rcmail.gettext('forward', 'forward')).appendTo(tab);
     rcmail.add_element(tab, 'tabs');
     rcmail.register_command('plugin.forward-save', function() { 
       var input_new_forward = rcube_find_object('_new_forward');

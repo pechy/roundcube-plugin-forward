@@ -27,7 +27,7 @@ class forward extends rcube_plugin {
         $this->register_action('plugin.forward', array($this, 'forward_init'));
         $this->register_action('plugin.forward-save', array($this, 'forward_save'));
         $this->register_action('plugin.forward-delete', array($this, 'forward_delete'));
-        $rcmail->output->add_label('forward');
+        $rcmail->output->add_label('forward.forward');
         $this->include_script('forward.js');
     }
     function forward_init() {
