@@ -11,7 +11,7 @@ $rcmail_config['forward_max_forwards']=5;
 $rcmail_config['forward_to_same_addr']=TRUE;
 //on my postfix server, when I add one forward rule to remote address, I have to add also forward rule (user = alias), otherwise my emails are delivered only to remove address, not to roundcube
 //adding only one forward rule causes complete forward, no messages will be delivered to this mailbox
-//setting this to TRUE ensures, this settings ensures, if there is >0 forward rules, there will be also forward to the same address, if all forwards are deleted, rule forwarding to same address will be also deleted
+//setting this to TRUE ensures, that if there is >0 forward rules, there will be also forward to the same address, if all forwards are deleted, rule forwarding to same address will be also deleted
 
 $rcmail_config['forward_driver']='sql';
 //driver to be used by Forward - currenty there is only sql
