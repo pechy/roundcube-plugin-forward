@@ -1,6 +1,6 @@
 <?php
 include_once("forward_driver_abstract.php");
-class forward_driver_sql extends forward_driver_abstract {
+class forward_driver_sql implements forward_driver_abstract {
   private $conn;
   function __construct($dsn) {
     if (!class_exists('rcube_db')) {
