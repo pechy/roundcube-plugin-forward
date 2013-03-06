@@ -1,6 +1,5 @@
 <?php
 interface forward_driver_abstract {
-  private $conn;
   function __construct($info); //connect
   function add_new($from, $to, $rcmail); //add new forwarding
   function delete($from, $to, $rcmail); //delete forwarding
