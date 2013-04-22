@@ -4,7 +4,7 @@
  * Simple plugin that allows to create forward rules. Currently works only with Postfix configuration stored in database
  *
  * @version 0.2
- * @author Martin Petracek <pechy@bubakov.net>
+ * @author Martin Petracek <martin@petracek.net>
  *  
  */
 
