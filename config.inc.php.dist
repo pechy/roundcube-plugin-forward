@@ -22,17 +22,17 @@ $rcmail_config['forward_sql_construct']='mysql://postfixuser:postfixpass@host/po
 //this value is given as parameter to __construct() of driver class
 //Postfix DB creditials
 
-$rcmail_config['forward_sql_new_forward']="INSERT INTO `users` VALUES (%u, '', '', '', '', 'forward', %f, '');";
+$rcmail_config['forward_sql_new_forward']="INSERT INTO `alias` VALUES ('%u', '%f', '', '', '', 1);";
 //SQL query for insert new FORWARD address (escaping and adding quotes is done by module)
 // %u - current user
 // %f - address for forwarding
 
-$rcmail_config['forward_sql_del_forward']="DELETE FROM `users` WHERE `mail` LIKE %u AND `typ` LIKE 'forward' AND `alias` LIKE %a";
+$rcmail_config['forward_sql_del_forward']="DELETE FROM `alias` WHERE `address` LIKE '%u' AND `goto` LIKE '%a' LIMIT 1";
 //SQL query for selecting rules for this mail (escaping and adding quotes is done by module)
 // %u - current user
 // %a - alias to be removed
 
-$rcmail_config['forward_sql_list_forwards']="SELECT alias FROM `users` WHERE `mail` LIKE %u AND `typ` LIKE 'forward'";
+$rcmail_config['forward_sql_list_forwards']="SELECT goto FROM `alias` WHERE `address` LIKE '%u'";
 //SQL query for selecting rules for this mail (escaping and adding quotes is done by module)
 //please note that the query should return only one collum
 // %u - current user
