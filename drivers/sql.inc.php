@@ -17,6 +17,14 @@ class forward_driver_sql implements forward_driver_abstract {
     if (!$this->conn->is_error()) return TRUE;
     else return FALSE;
   }
+  public function update($from, $to, $rcmail) {
+    $sql = $rcmail->config->get('forward_sql_update_forward');
+    $sql = str_replace('%u', $this->conn->quote($from), $sql);
+    $sql = str_replace('%a', $this->conn->quote($to), $sql);
+    $this->conn->query($sql);
+    if (!$this->conn->is_error()) return TRUE;
+    else return FALSE;
+  }
   public function delete($from, $to, $rcmail) {
     $sql = $rcmail->config->get('forward_sql_del_forward');
     $sql = str_replace('%u', $this->conn->quote($from), $sql);
