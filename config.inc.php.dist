@@ -4,6 +4,7 @@
 
 $rcmail_config['forward_domain']='@example.com';
 //domain (required if usernames is stored in roundcube database without domain part)
+//NOTE: this is the same for all domains in a multi domain setup, @2DO this should be made more intelligent, typically the domain is already in the alias table
 
 $rcmail_config['forward_max_forwards']=5;
 //max forward address per user - to protect from misusing roundcube as spam tool by bad guys
@@ -12,6 +13,12 @@ $rcmail_config['forward_to_same_addr']=TRUE;
 //on my postfix server, when I add one forward rule to remote address, I have to add also forward rule (user = alias), otherwise my emails are delivered only to remove address, not to roundcube
 //adding only one forward rule causes complete forward, no messages will be delivered to this mailbox
 //setting this to TRUE ensures, that if there is >0 forward rules, there will be also forward to the same address, if all forwards are deleted, rule forwarding to same address will be also deleted
+//setting to FALSE will allow forward to local mailbox to be removed when 'forward_commaseparated_alias_list' is also set tot TRUE
+
+$rcmail_config['forward_commaseparated_alias_list']=TRUE;
+//in the setup with postfix admin, ( and multiple domains) the aliases are define as a list of comma separated email adresses
+//in the goto field. Modifications made by plugin are compatible with postfixadmin
+//this setup treats the from field as unique and as such there is only one entry per address.
 
 $rcmail_config['forward_driver']='sql';
 //driver to be used by Forward - currenty there is only sql
@@ -22,17 +29,23 @@ $rcmail_config['forward_sql_construct']='mysql://postfixuser:postfixpass@host/po
 //this value is given as parameter to __construct() of driver class
 //Postfix DB creditials
 
-$rcmail_config['forward_sql_new_forward']="INSERT INTO `alias` VALUES ('%u', '%f', '', '', '', 1);";
+$rcmail_config['forward_sql_new_forward']="INSERT INTO `alias` VALUES (%u, %f, '', '', '', 1);";
 //SQL query for insert new FORWARD address (escaping and adding quotes is done by module)
 // %u - current user
 // %f - address for forwarding
 
-$rcmail_config['forward_sql_del_forward']="DELETE FROM `alias` WHERE `address` LIKE '%u' AND `goto` LIKE '%a' LIMIT 1";
+$rcmail_config['forward_sql_update_forward']="UPDATE `alias` set `goto`=%a WHERE `address` LIKE %u";
+//SQL query for update of FORWARD address (escaping and adding quotes is done by module)
+// %u - current user
+// %a - alias for forwarding
+
+$rcmail_config['forward_sql_del_forward']="DELETE FROM `alias` WHERE `address` LIKE %u AND `goto` LIKE %a LIMIT 1";
 //SQL query for selecting rules for this mail (escaping and adding quotes is done by module)
 // %u - current user
 // %a - alias to be removed
 
-$rcmail_config['forward_sql_list_forwards']="SELECT goto FROM `alias` WHERE `address` LIKE '%u'";
+//$rcmail_config['forward_sql_list_forwards']="SELECT goto FROM `alias` WHERE `address` LIKE '%u'";
+$rcmail_config['forward_sql_list_forwards']="SELECT goto FROM `alias` WHERE `address` LIKE %u";
 //SQL query for selecting rules for this mail (escaping and adding quotes is done by module)
 //please note that the query should return only one collum
 // %u - current user
