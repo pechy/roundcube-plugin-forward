@@ -3,8 +3,9 @@
  *
  * Simple plugin that allows to create forward rules. Currently works only with Postfix configuration stored in database
  *
- * @version 0.2
+ * @version 0.3
  * @author Martin Petracek <martin@petracek.net>
+ *         v0.3 Marco Dings <marco@blox42.com>
  *  
  */
 
@@ -15,6 +16,12 @@ To install the plugin you have to:
 
 
 History
-
-0.2 Rewrited to be more modular, SQL related parts moved to drivers/sql.inc.php, now supports rouncube-0.9-beta
+0.3 Added Posfix admin compatible mode where aliases are a single line in the alias database and forwards are
+    encoded as commaseparated list of adresses. The plugin enforces a minmum of one alias or mailbox.
+    Added information to pop-up for deletion
+    Eye Candy - Added styling to output
+    Fixed quoting in config.inc.php.dist
+    Tested with roundcube v0.9.1
+    -- Marco Dings <marco@blox42.com>
+0.2 Rewriten to be more modular, SQL related parts moved to drivers/sql.inc.php, now supports rouncube-0.9-beta
 0.1 Initial version.
