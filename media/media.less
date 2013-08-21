@@ -1,0 +1,27 @@
+/*
+ * do NOT modify .css directly, modify .less and regenerate.
+ */
+#pluginbody #forwardform {
+  .alias {
+  }
+  .mailbox {
+    color: red;
+  }
+  .title {
+    padding-left: 8px;
+  }
+  @iconsize: 32px;
+  .icon_alias,
+  .icon_mailbox {
+    background-repeat: no-repeat;
+    padding-top:  @iconsize;  // width of the image plus a little extra padding
+    padding-left: @iconsize;
+    display: block;
+  }
+  .icon_mailbox {
+    background-image: url('folder.png');
+  }
+  .icon_alias {
+    background-image: url('forward.png');
+  }
+}
