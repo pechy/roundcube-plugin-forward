@@ -18,9 +18,13 @@
 		<user>marcodings</user>
 		<email>marco@blox42.com</email>
 	</contributor>
-	<date>2013-08-21</date>
+	<contributor>
+		<name>Francesco Fiore</name>
+		<user>ffiore</user>
+	</contributor>
+	<date>2013-09-23</date>
 	<version>
-		<release>0.3</release>
+		<release>0.4</release>
 	</version>
 	<stability>
 		<release>stable</release>
@@ -28,12 +32,7 @@
 	</stability>
 	<license uri="http://www.gnu.org/licenses/gpl-2.0.html">GNU GPLv2</license>
 	<notes>
-Added Posfix admin compatible mode where aliases are a single line in the alias database and forwards are encoded as commaseparated list of adresses. The plugin enforces a minmum of one alias or mailbox.
-Added information to pop-up for deletion
-Eye Candy - Added styling to output
-Fixed quoting in config.inc.php.dist
-Tested with roundcube v0.9.1
--- Marco Dings <marco@blox42.com>
+	new LDAP driver, IT translation, some fixes (by ffiore)
     </notes>
 	<contents>
 		<dir baseinstalldir="/" name="/">
@@ -59,6 +58,24 @@ Tested with roundcube v0.9.1
 	</dependencies>
 	<phprelease/>
 	<changelog>
+        <release>
+        	<date>2013-08-21</date>
+        	<version>
+		        <release>0.3</release>
+        	</version>
+        	<stability>
+		        <release>stable</release>
+        	</stability>
+        	<license uri="http://www.gnu.org/licenses/gpl-2.0.html">GNU GPLv2</license>
+        	<notes>
+Added Posfix admin compatible mode where aliases are a single line in the alias database and forwards are encoded as commaseparated list of adresses. The plugin enforces a minmum of one alias or mailbox.
+Added information to pop-up for deletion
+Eye Candy - Added styling to output
+Fixed quoting in config.inc.php.dist
+Tested with roundcube v0.9.1
+-- Marco Dings <marco@blox42.com>
+            </notes>
+        </release>
         <release>
         	<date>2013-02-08</date>
         	<version>
