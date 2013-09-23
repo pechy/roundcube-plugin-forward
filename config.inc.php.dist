@@ -21,8 +21,7 @@ $rcmail_config['forward_commaseparated_alias_list']=TRUE;
 //this setup treats the from field as unique and as such there is only one entry per address.
 
 $rcmail_config['forward_driver']='sql';
-//driver to be used by Forward - currenty there is only sql
-
+//driver to be used by Forward - currenty there is only sql and ldap
 
 //SQL driver config section
 $rcmail_config['forward_sql_construct']='mysql://postfixuser:postfixpass@host/postfixdb';
@@ -49,4 +48,35 @@ $rcmail_config['forward_sql_list_forwards']="SELECT goto FROM `alias` WHERE `add
 //SQL query for selecting rules for this mail (escaping and adding quotes is done by module)
 //please note that the query should return only one collum
 // %u - current user
+
+$rcmail_config['forward_ldap_host'] = 'ldap.example.com';
+// LDAP host
+
+$rcmail_config['forward_ldap_port'] = 389;
+// LDAP port
+
+$rcmail_config['forward_ldap_starttls'] = FALSE;
+//LDAP starttls
+
+$rcmail_config['forward_ldap_version'] = 3;
+//LDAP protocol version
+
+$rcmail_config['forward_ldap_basedn'] = 'ou=People,dc=%d,o=organization,dc=example,dc=com';
+// LDAP basedn
+// %u - current user (session username)
+// %d - domain part of the session username
+// %l - local part of the session username
+
+$rcmail_config['forward_ldap_binddn'] = NULL;
+$rcmail_config['forward_ldap_bindpwd'] = NULL;
+
+$rcmail_config['forward_ldap_binddn_search_filter'] = "(&(objectclass=mailrecipient)(mail=%u))";
+// LDAP search the DN to use to bind
+// %u - current user (session username)
+// %d - domain part of the session username
+// %l - local part of the session username
+
+$rcmail_config['forward_ldap_forwarding_attr'] = 'mailForwardingAddress';
+// LDAP attribute for forwarding specification
+
 ?>

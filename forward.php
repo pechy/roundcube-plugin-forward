@@ -156,7 +156,8 @@ class forward extends rcube_plugin {
 				} else $table2->add('title', Q($this->gettext('msg_misconfigured')));
 			} else {
 				foreach ($list as $rule) {
-					if ($rule == $this->username) continue;
+					if ($rcmail->config->get('forward_to_same_addr'))
+						if ($rule == $this->username) continue;
 					$table2->add('icon_alias','&nbsp');
 					$table2->add('alias', $rule);
 					$dlink = "<a href='./?_task=settings&_action=plugin.forward-delete&mail=" . urlencode($rule) .
