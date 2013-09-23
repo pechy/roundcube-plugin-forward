@@ -1,7 +1,5 @@
 <?php
-// Forward Plugin options
-
-
+// General Plugin options
 $rcmail_config['forward_domain']='@example.com';
 //domain (required if usernames is stored in roundcube database without domain part)
 //NOTE: this is the same for all domains in a multi domain setup, @2DO this should be made more intelligent, typically the domain is already in the alias table
@@ -22,6 +20,8 @@ $rcmail_config['forward_commaseparated_alias_list']=TRUE;
 
 $rcmail_config['forward_driver']='sql';
 //driver to be used by Forward - currenty there is only sql and ldap
+//you should configure appropriate section below for selected driver
+
 
 //SQL driver config section
 $rcmail_config['forward_sql_construct']='mysql://postfixuser:postfixpass@host/postfixdb';
@@ -43,7 +43,8 @@ $rcmail_config['forward_sql_del_forward']="DELETE FROM `alias` WHERE `address` L
 // %u - current user
 // %a - alias to be removed
 
-//$rcmail_config['forward_sql_list_forwards']="SELECT goto FROM `alias` WHERE `address` LIKE '%u'";
+
+//LDAP driver config section
 $rcmail_config['forward_sql_list_forwards']="SELECT goto FROM `alias` WHERE `address` LIKE %u";
 //SQL query for selecting rules for this mail (escaping and adding quotes is done by module)
 //please note that the query should return only one collum
