@@ -1,12 +1,13 @@
 /**
  * Forward
  *
- * Simple plugin that allows to create forward rules. Currently works only with Postfix configuration stored in database
+ * Simple plugin that allows to create forward rules. Currently works with Postfix alias configuration in database or LDAP.
  *
- * @version 0.4
+ * @version 0.5
  * @author Martin Petracek <martin@petracek.net>
  *         v0.3 Marco Dings <marco@blox42.com>
  *         v0.4 Francesco Fiore
+ *         v0.5 Christian Grunfeld
  *  
  */
 
@@ -17,6 +18,7 @@ To install the plugin you have to:
 
 
 History
+0.5 Support for situations, when users and aliases (comma separated) are in separate tables (by Christian Grunfeld)
 0.4 New LDAP driver, IT tranlation, some fixes (by Francesco Fiore)
 0.3 Added Posfix admin compatible mode where aliases are a single line in the alias database and forwards are
     encoded as commaseparated list of adresses. The plugin enforces a minmum of one alias or mailbox.
