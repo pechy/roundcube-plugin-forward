@@ -12,6 +12,7 @@ class forward extends rcube_plugin {
 	private $driver;
 	private $username;
 	public $task = 'settings';
+
 	function init() {
 		$rcmail = rcmail::get_instance();
 		$this->load_config();
@@ -32,6 +33,7 @@ class forward extends rcube_plugin {
 		$this->include_script('forward.js');
 		$this->include_stylesheet('media/forward.css');
 	}
+
 	function forward_init() {
 		$this->add_texts('localization/');
 		$this->register_handler('plugin.body', array($this, 'forward_form'));
@@ -39,6 +41,7 @@ class forward extends rcube_plugin {
 		$rcmail->output->set_pagetitle($this->gettext('forward'));
 		$rcmail->output->send('plugin');
 	}
+
 	function forward_save() {
 		$rcmail = rcmail::get_instance();
 		$this->add_texts('localization/');
@@ -53,8 +56,18 @@ class forward extends rcube_plugin {
 				$list=$this->driver->get_list($this->username,$rcmail);
 
 				if ( $rcmail->config->get('forward_commaseparated_alias_list')) { // pfa setup with single records and comma separated aliases
-					$fwd_adresses = array_unique( array_filter( explode(',', $list[0])) , SORT_STRING ); // we should always have at least one
-					if (count($fwd_adresses) < $rcmail->config->get('forward_max_forwards')) { //check if there isn't too many address for redirecting
+					$fwd_adresses = array_unique( array_filter( explode(',', $list[0])) , SORT_STRING ); // we should always have zero or one
+					if (count($fwd_adresses) == 0) { //no forward for this user....insert one!
+					  array_push($fwd_adresses, $forward);
+					  $newrule=implode(',', array_unique( $fwd_adresses , SORT_STRING ));
+
+					  if ($this->driver->add_new($this->username,$newrule,$rcmail)) {
+					    $rcmail->output->command('display_message', $this->gettext('successfullysaved'), 'confirmation');
+					    write_log('forward', "user $this->username set new forward address to $forward"); //log success
+					  } else $rcmail->output->command('display_message', $this->gettext('unsuccessfullysaved'), 'error');
+
+					}
+					elseif (count($fwd_adresses) < $rcmail->config->get('forward_max_forwards')) { //check if there isn't too many address for redirecting
 						array_push($fwd_adresses, $forward);
 						$newrule=implode(',', array_unique( $fwd_adresses , SORT_STRING ));
 
@@ -84,6 +97,7 @@ class forward extends rcube_plugin {
 		rcmail_overwrite_action('plugin.forward');
 		$rcmail->output->send('plugin');
 	}
+
 	function forward_update() {
 		$rcmail = rcmail::get_instance();
 		$this->register_handler('plugin.body', array($this, 'forward_form'));
@@ -98,6 +112,7 @@ class forward extends rcube_plugin {
 		rcmail_overwrite_action('plugin.forward');
 		$rcmail->output->send('plugin');
 	}
+
 	function forward_delete() {
 		$rcmail = rcmail::get_instance();
 		$this->register_handler('plugin.body', array($this, 'forward_form'));
@@ -112,6 +127,7 @@ class forward extends rcube_plugin {
 		rcmail_overwrite_action('plugin.forward');
 		$rcmail->output->send('plugin');
 	}
+
 	function forward_form() {
 		$rcmail = rcmail::get_instance();
 		$rcmail->output->add_label('forward.noaddressfilled'); //for correctly displaying alert if <input> is empty
@@ -136,13 +152,17 @@ class forward extends rcube_plugin {
 						$tmprules = $rules;
 						$rule2delete=$tmprules[$key];
 						unset($tmprules[$key]);
-						$newrule = implode(',', $tmprules); # we pass the remaining rules to update, @2DO should we encrypt to guard for modification?
-						if ( count($rules) > 1 ) {
+            $newrule = implode(',', $tmprules); # we pass the remaining rules to update if one or more....pass to delete entry in db if no more rules, @2DO should we encrypt to guard for modification?
+            if ( count($tmprules) >= 1 ) {
 							$dlink = "<a href='./?_task=settings&_action=plugin.forward-update&mail=" . urlencode($newrule) .
 								"' onclick=\"return confirm('" . $this->gettext('reallydelete') . " : " . $rule2delete . "');\">" .
 								$this->gettext('delete') . "</a>";
-						} else {
-							$dlink =  $this->gettext('deletenotallows') ;
+
+            } else { //no more aliases.....delete entry in forwardings table
+//              $dlink =  $this->gettext('deletenotallows') ;
+              $dlink = "<a href='./?_task=settings&_action=plugin.forward-delete&mail=" . urlencode($rule2delete) .
+                "' onclick=\"return confirm('" . $this->gettext('reallydelete') . " : " . $rule2delete . "');\">" .
+                $this->gettext('delete') . "</a>";
 						}
 						if ($rule == $this->username) {
 							$table2->add('icon_mailbox','&nbsp');
