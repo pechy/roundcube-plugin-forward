@@ -22,9 +22,13 @@
 		<name>Francesco Fiore</name>
 		<user>ffiore</user>
 	</contributor>
-	<date>2013-09-23</date>
+	<contributor>
+		<name>Christian Grunfeld</name>
+		<email>christian.grunfeld@gmail.com</email>
+	</contributor>
+	<date>2013-11-05</date>
 	<version>
-		<release>0.4</release>
+		<release>0.5</release>
 	</version>
 	<stability>
 		<release>stable</release>
@@ -32,8 +36,8 @@
 	</stability>
 	<license uri="http://www.gnu.org/licenses/gpl-2.0.html">GNU GPLv2</license>
 	<notes>
-	new LDAP driver, IT translation, some fixes (by ffiore)
-    </notes>
+Support for situations, when users and aliases (comma separated) are in separate tables, ES translation (by Christian Grunfeld)
+	</notes>
 	<contents>
 		<dir baseinstalldir="/" name="/">
 			<file name="forward.php" role="php"></file>
@@ -58,6 +62,19 @@
 	</dependencies>
 	<phprelease/>
 	<changelog>
+        <release>
+        	<date>2013-09-23</date>
+        	<version>
+		        <release>0.4</release>
+        	</version>
+        	<stability>
+		        <release>stable</release>
+        	</stability>
+        	<license uri="http://www.gnu.org/licenses/gpl-2.0.html">GNU GPLv2</license>
+		<notes>
+new LDAP driver, IT translation, some fixes (by ffiore)
+            </notes>
+       </release>
         <release>
         	<date>2013-08-21</date>
         	<version>
