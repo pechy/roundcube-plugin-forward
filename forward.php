@@ -47,7 +47,7 @@ class forward extends rcube_plugin {
 		$this->add_texts('localization/');
 		$this->register_handler('plugin.body', array($this, 'forward_form'));
 		$rcmail->output->set_pagetitle($this->gettext('forward'));
-		$forward = trim(strtolower(get_input_value('_new_forward', RCUBE_INPUT_POST, true)));
+		$forward  = preg_replace('/\\s+/', '',strtolower(get_input_value('_new_forward', RCUBE_INPUT_POST, true)));
 		$alreadythere = false; //flag - is this address alredy in DB?
 		$emailrx='/[a-z0-9\.-_+]+@[a-z0-9-.]+.[a-z0-9-.]+/'; # allow for subadressing
 		if ($forward == "") $rcmail->output->command('display_message', $this->gettext('invalidmail'), 'error');
